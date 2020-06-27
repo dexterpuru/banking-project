@@ -1,14 +1,17 @@
 package com.upGrad;
 
 import com.upGrad.beans.Account;
+import com.upGrad.exceptions.AccountNotFoundException;
 import com.upGrad.service.AccountService;
 import com.upGrad.service.AccountServiceImpl;
+import com.upGrad.utils.EMICalculator;
 
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws AccountNotFoundException {
         boolean flag = true;
         AccountService bankServices = new AccountServiceImpl();
         System.out.println("Kindly chose your option ");
@@ -18,9 +21,9 @@ public class Main {
             System.out.println("1. Create a new account ");
             System.out.println("2. Deposit money in an account");
             System.out.println("3. Withdraw money from an account");
-            System.out.println("4. Fund Transfer");
-            System.out.println("5. Get Account Details");
-            System.out.println("6. Show all accounts");
+            System.out.println("4. Get Account Details");
+            System.out.println("5. Show all accounts");
+            System.out.println("6. Calculate EMI");
             System.out.println("7. Exit");
             Scanner sc = new Scanner(System.in);
             int switchKey = sc.nextInt();
@@ -67,27 +70,7 @@ public class Main {
                     }
                     break;
 
-                case 4:
-                    System.out.println("This feature has yet to be added ");
-                    break;
-    /*
-                    case 4 : System.out.println("*****FUND TRANSFER*****");
-                    System.out.println("Enter your account number");
-                    long accountNoFrom = sc.nextLong();
-                    System.out.println("Enter amount you want to transfer");
-                    float transferAmount = sc.nextFloat();
-                    System.out.println("Enter account number to transfer");
-                    long accountNoTo = sc.nextLong();
-                    System.out.println("Enter your pin number");
-                    int pinNumber = sc.nextInt();
-                    boolean success = bankServices.fundTransfer(accountNoTo, accountNoFrom, transferAmount, pinNumber);
-                    if(success)
-                        System.out.println("Your transfer was successful ");
-                    else
-                        System.out.println("NOT SUCCESSFUL");
-                    break;
-
-               */ case 5 : System.out.println("*****ACCOUNT DETAILS********");
+                case 4 : System.out.println("*****ACCOUNT DETAILS********");
                     System.out.println("Enter your account number");
                     int accNo = sc.nextInt();
                     System.out.println("Enter your pin number");
@@ -100,13 +83,22 @@ public class Main {
                         System.out.println("Current balance : " + myAccount.getCurrentBalance());
                     }
                     break;
-                case 6 : System.out.println("******ALL ACCOUNTS*******");
+                case 5 : System.out.println("******ALL ACCOUNTS*******");
                    for(Map.Entry<Integer,Account> accountEntry : bankServices.getAllAccounts().entrySet()){
                        System.out.println("Account number : " + accountEntry.getValue().getAccountNumber());
                        System.out.println("Account holder name : " + accountEntry.getValue().getAccountHolderName());
                        System.out.println("Account balance : " + accountEntry.getValue().getCurrentBalance());
                        System.out.println("****************************************************************");
                    }
+                    break;
+
+                case 6 : System.out.println("******CALCULATE EMI*******");
+                    System.out.println("Enter total loan amount");
+                    int totalAmount = sc.nextInt();
+                    System.out.println("Enter number of months");
+                    int months = sc.nextInt();
+                    int emiAmount = EMICalculator.calculateEMIAmount(totalAmount,months);
+                    System.out.println("EMI = :" + emiAmount);
                     break;
 
                 case 7 : flag = false;
@@ -116,5 +108,8 @@ public class Main {
                     break;
             }
         }
+
+
     }
+
 }

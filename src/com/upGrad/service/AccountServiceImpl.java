@@ -3,9 +3,9 @@ package com.upGrad.service;
 import com.upGrad.DAO.AccountDAO;
 import com.upGrad.DAO.AccountDAOImpl;
 import com.upGrad.beans.Account;
+import com.upGrad.exceptions.AccountNotFoundException;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
 
@@ -16,7 +16,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account loginAccount(int accountNumber, int pin) {
+    public Account loginAccount(int accountNumber, int pin) throws AccountNotFoundException {
         Account tempAccount = accountDAO.getAccount(accountNumber);
         if(tempAccount == null) {
             System.out.println("Account does not exists");
@@ -33,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account addAmount(int accountNumber, int amount) {
+    public Account addAmount(int accountNumber, int amount) throws AccountNotFoundException {
         Account account = accountDAO.getAccount(accountNumber);
         account.setCurrentBalance(account.getCurrentBalance()+amount);
         accountDAO.updateAccount(account);
@@ -41,7 +41,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAmount(int accountNumber, int pin, int amount) {
+    public Account getAmount(int accountNumber, int pin, int amount) throws AccountNotFoundException {
         Account myaccount = loginAccount(accountNumber, pin);
         if(myaccount == null) {
             return null;

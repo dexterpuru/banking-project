@@ -1,11 +1,9 @@
 package com.upGrad.DAO;
 
 import com.upGrad.beans.Account;
+import com.upGrad.exceptions.AccountNotFoundException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 
 public class AccountDAOImpl implements AccountDAO{
     HashMap<Integer,Account> accountHashMap = new HashMap<>();
@@ -23,12 +21,12 @@ public class AccountDAOImpl implements AccountDAO{
     }
 
     @Override
-    public Account getAccount(int accountNumber) {
+    public Account getAccount(int accountNumber) throws AccountNotFoundException {
         Account tempAccount = accountHashMap.get(accountNumber);
         if(tempAccount == null)
-            System.out.println("Account does not exist");
+            throw new AccountNotFoundException("Account not found for accountNumber :" +accountNumber);
         else
-            System.out.println("Account details: ");
+            System.out.println("Account details: " + tempAccount.toString());
         return tempAccount;
     }
 
